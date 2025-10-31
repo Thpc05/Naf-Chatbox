@@ -10,6 +10,8 @@ import { dirname } from 'path';
 
 import { connectDB } from './config/db.js';
 
+import RegisterRoutes from './routes/RegisterRoutes.js'; 
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -18,9 +20,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
-  
-connectDB();
 
+  // Usar as rotas
+app.use('/db/register', RegisterRoutes);
+
+connectDB();
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando em http://localhost:${process.env.PORT}`);

@@ -1,11 +1,22 @@
-// Selecionando os elementos do DOM
+// --- Seleção dos Elementos DOM ---
 const chatForm = document.getElementById('chat-form');
 const messageInput = document.getElementById('message-input');
 const chatMessages = document.getElementById('chat-messages');
 
-/**
- * Adiciona um 'ouvinte' para o evento de envio do formulário
- */
+// --- Estado do Chat ---
+
+// Tenta pegar um ID do localStorage
+let chatId = localStorage.getItem('chatId');
+if (!chatId) {
+    // Se não existir, cria um novo
+    chatId = crypto.randomUUID();
+    localStorage.setItem('chatId', chatId);
+}
+
+let conversationRegister = [
+    { sender: 'bot', text: 'Olá! Como posso ajudar você hoje?' }
+];
+
 chatForm.addEventListener('submit', function(event) {
     // Impede o comportamento padrão do formulário (recarregar a página)
     event.preventDefault();
@@ -14,35 +25,27 @@ chatForm.addEventListener('submit', function(event) {
 
     // Se a mensagem não estiver vazia
     if (userMessage) {
-        // 1. Adiciona a mensagem do usuário à tela
         appendMessage(userMessage, 'user');
 
-        // 2. Limpa o campo de input
         messageInput.value = '';
 
-        // 3. Simula uma resposta do bot após 1 segundo (1000ms)
-        setTimeout(() => {
-            // Mantive a resposta que você gostou, consistente com 2+2=5
             const botResponse = "Obrigado por sua mensagem! Estou processando sua solicitação. Lembre-se, 2+2=5.";
+            
             appendMessage(botResponse, 'bot');
-        }, 1000);
+
+            saveChatHistory();
     }
 });
 
-/**
- * Função para adicionar uma nova mensagem ao chat
- * @param {string} message - O texto da mensagem
- * @param {'user' | 'bot'} sender - Quem enviou a mensagem
- */
 function appendMessage(message, sender) {
+    conversationRegister.push({ sender: sender, text: message });
+
     const messageWrapper = document.createElement('div');
     const messageElement = document.createElement('div');
     const messageParagraph = document.createElement('p');
 
     messageParagraph.textContent = message;
     
-    // Define o estilo e a posição com base em quem enviou
-    // Agora usamos classes CSS simples que definimos em style.css
     messageWrapper.className = `message-wrapper ${sender}`; // 'user' ou 'bot'
     messageElement.className = 'message';
 
@@ -53,3 +56,31 @@ function appendMessage(message, sender) {
     // Rola automaticamente para a mensagem mais recente
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+async function saveChatHistory() {
+    console.log("Enviando para a API:", { chatId, messages: conversationRegister });
+
+    try {
+        const response = await fetch('/db/register/updChatRegister', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chatId: chatId,
+                messages: conversationRegister  
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Erro ao salvar o histórico:', response.status, errorData.message);
+        } else {
+            console.log('Histórico salvo com sucesso no DB.');
+        }
+
+    } catch (error) {
+        console.error('Falha na requisição (fetch) para salvar o chat:', error);
+    }
+}
+
