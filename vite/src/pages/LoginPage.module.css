@@ -1,0 +1,105 @@
+.loginPageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--chat-bg); 
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.loginCard {
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 3rem;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.avatarCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+.loginCard h2 {
+  color: var(--unifor-blue);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.loginCard p {
+  color: #666;
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
+}
+
+.loginForm {
+  text-align: left;
+}
+
+.loginForm label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.loginForm input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin-bottom: 1.25rem;
+  transition: var(--smooth-transition);
+  font-size: 1rem;
+}
+
+.loginForm input:focus {
+  outline: none;
+  border-color: var(--unifor-accent);
+  box-shadow: 0 0 0 3px rgba(0, 119, 200, 0.15);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--unifor-blue);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--smooth-transition);
+  margin-top: 1.5rem;
+}
+
+.submitButton:hover {
+  background-color: var(--unifor-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 74, 145, 0.2);
+}
+
+.logoImage {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+}
