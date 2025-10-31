@@ -1,4 +1,5 @@
 // server/server.js
+
 import express from 'express';
 import dotenv from 'dotenv';
 
@@ -16,7 +17,7 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.use(express.static(path.join(__dirname, '..', 'Front')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
   
 connectDB();
 
