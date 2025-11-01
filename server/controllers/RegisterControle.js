@@ -1,25 +1,37 @@
-// Importa o Model que vamos criar
+// Importa o Model
 import registerModel from '../models/chatRegisterModel.js';
 
 export const updChatRegister = async (req, res) => {
   try {
   
-    const { chatId, messages } = req.body;
+    const { user } = req.body;
+    const { nome, email, telefone, bairro, cpf, cnpj, chats} = user.user;
+    console.log(user);
+    console.log(email)
 
     // Validação
-    if (!chatId || !messages) {
-      return res.status(400).json({ message: 'chatId e messages são obrigatórios.' });
+    if (!email) {
+      return res.status(400).json({ message: 'email esta vazio.' });
     }
+
 
     const options = {
       new: true,
       upsert: true, // Cria o documento se ele não existir
       runValidators: true, // Roda as validações do Schema
     };
-
+    // LocalUser:"{"nome":"a","email":"a@a","telefone":"a","bairro":"a","cpf":"a","cnpj":"a","chats":[]}"
     const updatedHistory = await registerModel.findOneAndUpdate(
-      { chatId: chatId }, // Critério de busca
-      { messages: messages },    // Dados para atualizar
+      { email: email }, // Critério de busca
+      {              // Dados para atualizar
+        nome: nome,
+        email: email,
+        telefone: telefone,
+        bairro: bairro,
+        cpf: cpf,
+        cnpj: cnpj,
+        chats: chats
+       }, 
       options                     // Opções
     );
 

@@ -11,6 +11,7 @@ const LoginPage = () => {
     bairro: '',
     cpf: '',
     cnpj: '',
+    chats: []
   });
   
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Dados do formulário:', formData);
+    localStorage.setItem('LocalUser', JSON.stringify(formData));
     
     navigate('/chat');
   };

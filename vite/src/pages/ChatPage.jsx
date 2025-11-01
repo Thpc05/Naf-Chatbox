@@ -1,71 +1,84 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatPage.module.css';
-import SaveonDB from '../requisicoes/ChatRegiter'
+import UpdChatDB from '../requisicoes/ChatRegiter'
+
 
 const ChatPage = () => {
-  // 'ChatId' para a "sessão", vai ser executado só uma vez quando o componente (acho que esse é o termo certo) for criado
-  const [chatId, setChatId] = useState(() => Date.now().toString());
-
-  const [messages, setMessages] = useState([
-    // O banco de dados não precisa desse id, é mais pro react mesmo
-    { localId: 1, sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
-
-    //antes estava assim:
-    // { id: 1, sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
+  const [user, setUser] = useState(null); // vtnc useState
+  const [chats, setChats] = useState([]); // prefiro let
+  const [chatId, setChatId] = useState(null); // saudades js
+  const [thisChat, setThisChat] = useState([ // Demorei pra entender q vc n ta copiando e sim ligando
+    {sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
   ]);
+  
+  useEffect(() => {
+    const localUser = JSON.parse(localStorage.getItem('LocalUser'));
+      
+    if (localUser) {
+        setUser(localUser);
+        
+        const localChats = localUser.chats || [];
+        setChats(localChats);
+
+        // Logica chatId
+        const newChatId = (localChats.length > 0) ? localChats[localChats.length - 1].id + 1 : 1;
+        setChatId(newChatId);
+
+        setChats(prevChats => [
+          ...prevChats, 
+          { chatId: newChatId, messages: [] } 
+        ]);
+
+      } else {
+        console.error("Usuário não encontrado no localstorage. O login falhou?");
+      }
+  }, []);
+
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [thisChat]);
 
   const handleSend = async (e) => {
     e.preventDefault();
     if (input.trim() === '') return;
 
-    const userMessageForState = { 
-      localId: Date.now(), // ID local só para o React
-      sender: 'user', 
-      text: input 
-    };
-    setMessages(prev => [...prev, userMessageForState]);
+    const userMessage = { sender: 'user', text: input };
+    setThisChat(prev => [...prev, userMessage]);
 
-    // Aqui que é pra enviar
-    const userDataForDB = {
-      chatId: chatId,
-      sender: 'user',
-      text: input
-    };
+    console.log(userMessage);
 
-    console.log("Enviando (user):", userDataForDB);
-    SaveonDB(userDataForDB);
-    
-    const currentInput = input;
+    const botResponse = { 
+      // Colocar aqui a cool IA logic, que aplica o BackEnd e tals (/≧▽≦)/
+      // Bingchilim
+
+      sender: 'bot', 
+      text: `Esta é uma resposta simulada para: "${input}". Meu backend legal e maneiro ainda está sendo construído ^_~`
+    };
     setInput('');
 
-
-    const botText = `Esta é uma resposta simulada para: "${currentInput}". Meu backend legal e maneiro ainda está sendo construído ^_~`;
-
-    const botMessageForState = { 
-      localId: Date.now() + 1, // Não acho que o +1 tenha problema aqui, só para diferenciar a key local
-      sender: 'bot', 
-      text: botText
-    };
-
-    // Bot enviando ao DB
-    const botDataForDB = {
-      chatId: chatId,
-      sender: 'bot',
-      text: botText
-    };
-
     setTimeout(() => {
-      setMessages(prev => [...prev, botMessageForState]);
-      
-      console.log("(bot):", botDataForDB);
-      // SaveonDB(botDataForDB); 
+      setThisChat(prev => [...prev, botResponse]);
     }, 1000);
+
+    const upddChats = chats.map(chat => {
+      if (chat.chatId === chatId) {
+        return { 
+          ...chat, 
+          messages: [...chat.messages, userMessage, botResponse] 
+        };
+      }
+      return chat;
+    });
+
+    const upddUser = { ...user, chats: upddChats };
+
+    setUser(upddUser);
+    setChats(upddChats);
+
+    UpdChatDB({user: upddUser}); // Atualiza o mongo
   };
 
   return (
@@ -82,7 +95,7 @@ const ChatPage = () => {
         </header>
         
         <main className={styles.messageList}>
-          {messages.map((msg) => (
+          {thisChat.map((msg) => (
             <div 
               key={msg.id} 
               className={`${styles.message} ${msg.sender === 'user' ? styles.userMessage : styles.botMessage}`}
