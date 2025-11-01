@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatPage.module.css';
+import SaveonDB from '../requisicoes/ChatRegiter'
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([
@@ -18,7 +19,10 @@ const ChatPage = () => {
 
     const userMessage = { id: Date.now(), sender: 'user', text: input };
     setMessages(prev => [...prev, userMessage]);
-    
+
+    console.log(userMessage);
+    SaveonDB(userMessage);
+
     const botResponse = { 
       // Colocar aqui a cool IA logic, que aplica o BackEnd e tals (/≧▽≦)/
 
