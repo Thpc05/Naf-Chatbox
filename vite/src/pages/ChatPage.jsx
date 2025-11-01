@@ -4,10 +4,10 @@ import UpdChatDB from '../requisicoes/ChatRegiter'
 
 
 const ChatPage = () => {
-  const [user, setUser] = useState(null); // vtnc useState
-  const [chats, setChats] = useState([]); // prefiro let
-  const [chatId, setChatId] = useState(null); // saudades js
-  const [thisChat, setThisChat] = useState([ // Demorei pra entender q vc n ta copiando e sim ligando
+  const [user, setUser] = useState(null); // vtnc useState -Theodosius // Vai, não é tão ruim -Buisi
+  const [chats, setChats] = useState([]); // prefiro let -Theodosius
+  const [chatId, setChatId] = useState(null); // saudades js -Theodosius
+  const [thisChat, setThisChat] = useState([ // Demorei pra entender q vc n ta copiando e sim ligando -Theodosius // WWWWWW -Buisi
     {sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
   ]);
   
