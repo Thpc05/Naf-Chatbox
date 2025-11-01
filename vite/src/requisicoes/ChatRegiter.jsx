@@ -1,5 +1,5 @@
 export default async function SaveonDB(msg) {
-    const { id, sender , text } = msg;
+    const { chatId, sender , text } = msg;
   try {
         const response = await fetch('http://localhost:3035/db/register/updChatRegister', {
             method: 'POST',
@@ -7,8 +7,8 @@ export default async function SaveonDB(msg) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                chatId: id,
-                message: {
+                chatId: chatId,
+                messages: {
                     sender: sender,
                     text: text
                 }  

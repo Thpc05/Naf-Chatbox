@@ -3,8 +3,15 @@ import styles from './ChatPage.module.css';
 import SaveonDB from '../requisicoes/ChatRegiter'
 
 const ChatPage = () => {
+  // 'ChatId' para a "sessão", vai ser executado só uma vez quando o componente (acho que esse é o termo certo) for criado
+  const [chatId, setChatId] = useState(() => Date.now().toString());
+
   const [messages, setMessages] = useState([
-    { id: 1, sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
+    // O banco de dados não precisa desse id, é mais pro react mesmo
+    { localId: 1, sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
+
+    //antes estava assim:
+    // { id: 1, sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
   ]);
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
@@ -17,23 +24,47 @@ const ChatPage = () => {
     e.preventDefault();
     if (input.trim() === '') return;
 
-    const userMessage = { id: Date.now(), sender: 'user', text: input };
-    setMessages(prev => [...prev, userMessage]);
-
-    console.log(userMessage);
-    SaveonDB(userMessage);
-
-    const botResponse = { 
-      // Colocar aqui a cool IA logic, que aplica o BackEnd e tals (/≧▽≦)/
-
-      id: Date.now() + 1, 
-      sender: 'bot', 
-      text: `Esta é uma resposta simulada para: "${input}". Meu backend legal e maneiro ainda está sendo construído ^_~`
+    const userMessageForState = { 
+      localId: Date.now(), // ID local só para o React
+      sender: 'user', 
+      text: input 
     };
+    setMessages(prev => [...prev, userMessageForState]);
+
+    // Aqui que é pra enviar
+    const userDataForDB = {
+      chatId: chatId,
+      sender: 'user',
+      text: input
+    };
+
+    console.log("Enviando (user):", userDataForDB);
+    SaveonDB(userDataForDB);
+    
+    const currentInput = input;
     setInput('');
 
+
+    const botText = `Esta é uma resposta simulada para: "${currentInput}". Meu backend legal e maneiro ainda está sendo construído ^_~`;
+
+    const botMessageForState = { 
+      localId: Date.now() + 1, // Não acho que o +1 tenha problema aqui, só para diferenciar a key local
+      sender: 'bot', 
+      text: botText
+    };
+
+    // Bot enviando ao DB
+    const botDataForDB = {
+      chatId: chatId,
+      sender: 'bot',
+      text: botText
+    };
+
     setTimeout(() => {
-      setMessages(prev => [...prev, botResponse]);
+      setMessages(prev => [...prev, botMessageForState]);
+      
+      console.log("(bot):", botDataForDB);
+      // SaveonDB(botDataForDB); 
     }, 1000);
   };
 
