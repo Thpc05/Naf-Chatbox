@@ -1,3 +1,5 @@
+// RegisterControlle
+
 // Importa o Model
 import registerModel from '../models/chatRegisterModel.js';
 
@@ -24,13 +26,17 @@ export const updChatRegister = async (req, res) => {
     const updatedHistory = await registerModel.findOneAndUpdate(
       { email: email }, // Critério de busca
       {              // Dados para atualizar
-        nome: nome,
-        email: email,
-        telefone: telefone,
-        bairro: bairro,
-        cpf: cpf,
-        cnpj: cnpj,
-        chats: chats
+        $set: {
+          user: email,
+
+          nome: nome,
+          email: email,
+          telefone: telefone,
+          bairro: bairro,
+          cpf: cpf,
+          cnpj: cnpj,
+          chats: chats
+        }
        }, 
       options                     // Opções
     );
