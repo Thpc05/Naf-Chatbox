@@ -3,14 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import logo from '../assets/UniforLogo.svg';
 
-const LoginPage = () => {
+const ActualLoginPage = () => {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
-    telefone: '',
-    bairro: '',
-    cpf: '',
-    cnpj: '',
     chats: []
   });
   
@@ -60,33 +56,11 @@ const LoginPage = () => {
             required 
           />
 
-          <div className={styles.formGrid}>
-            <div>
-              <label htmlFor="telefone">Telefone *</label>
-              <input type="tel" id="telefone" name="telefone" onChange={handleChange} required />
-            </div>
-            <div>
-              <label htmlFor="bairro">Bairro *</label>
-              <input type="text" id="bairro" name="bairro" onChange={handleChange} required />
-            </div>
-          </div>
-
-          <div className={styles.formGrid}>
-            <div>
-              <label htmlFor="cpf">CPF (Opcional)</label>
-              <input type="text" id="cpf" name="cpf" onChange={handleChange} />
-            </div>
-            <div>
-              <label htmlFor="cnpj">CNPJ (Opcional)</label>
-              <input type="text" id="cnpj" name="cnpj" onChange={handleChange} />
-            </div>
-          </div>
-
           <button type="submit" className={styles.submitButton}>
             Acessar Chat
           </button>
-          <button type="button" className={styles.altButton} onClick={() => navigate('/')}>
-            Já tenho conta
+          <button type="button" className={styles.altButton} onClick={() => navigate('/Sign')}>
+            Não tenho conta
           </button>
         </form>
       </div>
@@ -94,4 +68,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ActualLoginPage;

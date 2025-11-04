@@ -98,6 +98,21 @@
   box-shadow: 0 4px 10px rgba(0, 74, 145, 0.2);
 }
 
+.altButton {
+  display: block;
+  margin: 0 auto;
+  color: blue;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--smooth-transition);
+  margin-top: 1.5rem;
+}
+.altButton:hover {
+  text-decoration: underline;
+}
+
 .logoImage {
   width: 60px;
   height: auto;
