@@ -85,9 +85,6 @@ const LoginPage = () => {
           <button type="submit" className={styles.submitButton}>
             Acessar Chat
           </button>
-          <button type="button" className={styles.altButton} onClick={() => navigate('/')}>
-            Já tenho conta
-          </button>
         </form>
       </div>
     </div>

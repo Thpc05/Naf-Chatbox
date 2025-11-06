@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import logo from '../assets/UniforLogo.svg';
+import { getAllUsersDB } from '../requisicoes/UsersReqs';
 
 const ActualLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,20 @@ const ActualLoginPage = () => {
     email: '',
     chats: []
   });
+
+  useEffect(() => { // Pega os dados do db e joga no localstoreage
+    const fetchUsers = async () => {
+      try {
+        const users = await getAllUsersDB();
+        localStorage.setItem('AllUsers', JSON.stringify(users));
+        localStorage.removeItem('LocalUser'); // Limpa o localUser
+        console.log("Usuários carregados e salvos no localStorage.");
+      } catch (error) {
+        console.error("Falha ao buscar usuários:", error);
+      }
+    };
+    fetchUsers();
+ }, []);
   
   const navigate = useNavigate();
 
@@ -19,10 +34,17 @@ const ActualLoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Dados do formulário:', formData);
-    localStorage.setItem('LocalUser', JSON.stringify(formData));
-    
-    navigate('/chat');
+
+    const allUsers = JSON.parse(localStorage.getItem('AllUsers')) || [];
+    const existingUser = allUsers.find(u => u.email === formData.email); // Faz Login
+
+    if (existingUser) {
+      console.log('Usuário encontrado:', existingUser);
+      localStorage.setItem('LocalUser', JSON.stringify(existingUser));
+      navigate('/chat');
+    } else {
+      alert('Usuário não encontrado. Verifique seu email ou crie uma conta.');
+    }
   };
 
   return (
@@ -35,14 +57,14 @@ const ActualLoginPage = () => {
         
         <h2>Acesso ao ChatBot IRPF</h2>
         <p>Preencha seus dados para iniciar a conversa.</p>
-
+      
         <form className={styles.loginForm} onSubmit={handleSubmit}>
           
           <label htmlFor="nome">Nome *</label>
           <input 
             type="text" 
             id="nome" 
-            name="nome" 
+            name="nome"
             onChange={handleChange} 
             required 
           />

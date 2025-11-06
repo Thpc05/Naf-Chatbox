@@ -1,9 +1,9 @@
 // RegisterControlle
 
 // Importa o Model
-import registerModel from '../models/chatRegisterModel.js';
+import registerModel from '../models/UserModel.js';
 
-export const updChatRegister = async (req, res) => {
+export const updUser = async (req, res) => {
   try {
   
     const { user } = req.body;
@@ -15,7 +15,6 @@ export const updChatRegister = async (req, res) => {
     if (!email) {
       return res.status(400).json({ message: 'email esta vazio.' });
     }
-
 
     const options = {
       new: true,
@@ -49,5 +48,20 @@ export const updChatRegister = async (req, res) => {
   } catch (error) {
     console.error("Erro no updRegistroChat:", error);
     res.status(500).json({ message: "Erro do servidor ao atualizar o chat." });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await registerModel.find({});
+    console.log(allUsers);
+    res.status(200).json({
+      message: "Todos os usuários obtidos com sucesso.",
+      data: allUsers
+    });
+  }
+  catch (error) {
+    console.error("Erro no GetAllUsers:", error);
+    res.status(500).json({ message: "Erro do servidor ao obter todos os usuários." });
   }
 };

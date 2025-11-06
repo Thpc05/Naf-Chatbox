@@ -1,33 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatPage.module.css';
-import UpdChatDB from '../requisicoes/ChatRegiter'
+import updUserDB from '../requisicoes/UsersReqs'
 
 
 const ChatPage = () => {
-  const [user, setUser] = useState(null); // vtnc useState -Theodosius // Vai, não é tão ruim -Buisi
+  const [user, setUser] = useState(); // vtnc useState -Theodosius // Vai, não é tão ruim -Buisi
   const [chats, setChats] = useState([]); // prefiro let -Theodosius
-  const [chatId, setChatId] = useState(null); // saudades js -Theodosius
-  const [thisChat, setThisChat] = useState([ // Demorei pra entender q vc n ta copiando e sim ligando -Theodosius // WWWWWW -Buisi
-    {sender: 'bot', text: 'Olá! Sou seu assistente virtual de IRPF. Como posso ajudar?' }
-  ]);
+  const [thisChatId, thisSetChatId] = useState(null); // saudades js -Theodosius
+  const [thisChat, setThisChat] = useState([]); // Demorei pra entender q vc n ta copiando e sim ligando -Theodosius // WWWWWW -Buisi
+  const [lastChatId, setLastChatId] = useState(null);
   
   useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem('LocalUser'));
-      
+    setThisChat([]); // Reseta o chat atual ao montar o componente
+    console.log("Carregando usuário do localStorage:", localUser);
     if (localUser) {
         setUser(localUser);
         
         const localChats = localUser.chats || [];
         setChats(localChats);
 
-        // Logica chatId
-        const newChatId = (localChats.length > 0) ? localChats[localChats.length - 1].id + 1 : 1;
-        setChatId(newChatId);
+        if(localChats.length > 0) {
 
-        setChats(prevChats => [
-          ...prevChats, 
-          { chatId: newChatId, messages: [] } 
-        ]);
+          const lastChat = localChats[localChats.length - 1];
+          setLastChatId(lastChat.chatId);
+
+          // Logica chatId
+          const currentChatId = parseInt(lastChat.chatId);
+          thisSetChatId(currentChatId);
+
+          setThisChat(lastChat.messages || []);
+        } else {
+          handleNewChat();
+        }
 
       } else {
         console.error("Usuário não encontrado no localstorage. O login falhou?");
@@ -63,27 +68,56 @@ const ChatPage = () => {
       setThisChat(prev => [...prev, botResponse]);
     }, 1000);
 
-    const upddChats = chats.map(chat => {
-      if (chat.chatId === chatId) {
-        return { 
-          ...chat, 
-          messages: [...chat.messages, userMessage, botResponse] 
-        };
-      }
-      return chat;
-    });
+    
 
+    const upddChats = chats.map(c => 
+      c.chatId.toString() === thisChatId.toString() 
+        ? { ...c, messages: [...c.messages, userMessage, botResponse] } 
+        : c
+    );
+  
     const upddUser = { ...user, chats: upddChats };
 
     setUser(upddUser);
     setChats(upddChats);
 
-    UpdChatDB({user: upddUser}); // Atualiza o mongo
+    localStorage.setItem('LocalUser', JSON.stringify(upddUser));
+
+    updUserDB({user: upddUser}); // Atualiza o mongo
+  };
+
+  const handleNewChat = () => {
+    const newChatId = lastChatId ? parseInt(lastChatId) + 1 : 1;
+    thisSetChatId(newChatId);
+    setLastChatId(newChatId);
+
+    const newChat = { chatId: newChatId.toString(), messages: [{'sender': 'bot', 'text': 'Olá! Eu sou o Assistente IRPF. Como posso ajudar você hoje?'}] };
+    const updatedChats = [...chats, newChat];
+    setChats(updatedChats);
+    setThisChat(newChat.messages || []);
   };
 
   return (
     <div className={styles.chatPageContainer}>
-      
+      <div className={styles.chatMenuContainer}>
+        <h2>Seus Chats</h2>
+        <div className={styles.chatMenuList}>
+          {chats.map((chat) => (
+            <button
+              key={chat.chatId}
+              className={styles.chatMenuItem}
+              onClick={() => {
+                thisSetChatId(chat.chatId);
+                setThisChat(chat.messages || []);
+              }}
+            >
+              Chat {chat.chatId}
+            </button>
+          ))}
+          <button onClick={handleNewChat} className={styles.btnNewChat}> Novo Chat
+          </button>
+        </div>
+      </div>
       <div className={`${styles.chatContainer} fade-in`}>
         
         <header className={styles.chatHeader}>
@@ -97,7 +131,6 @@ const ChatPage = () => {
         <main className={styles.messageList}>
           {thisChat.map((msg) => (
             <div 
-              key={msg.id} 
               className={`${styles.message} ${msg.sender === 'user' ? styles.userMessage : styles.botMessage}`}
             >
               {msg.text}
