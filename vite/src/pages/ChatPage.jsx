@@ -47,44 +47,46 @@ const ChatPage = () => {
   }, [thisChat]);
 
   const handleSend = async (e) => {
-    e.preventDefault();
-    if (input.trim() === '') return;
+  e.preventDefault();
+  if (input.trim() === '') return;
 
-    const userMessage = { sender: 'user', text: input };
-    setThisChat(prev => [...prev, userMessage]);
+  const userMessage = { sender: 'user', text: input };
+  setThisChat(prev => [...prev, userMessage]);
+  setInput('');
 
-    console.log(userMessage);
+  let botResponse = { sender: 'bot', text: '' };
 
-    const botResponse = { 
-      // Colocar aqui a cool IA logic, que aplica o BackEnd e tals (/≧▽≦)/
-      // Bingchilim
+  try {
+    const response = await fetch('http://localhost:3035/db/register/perguntar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pergunta: input })
+    });
 
-      sender: 'bot', 
-      text: `Esta é uma resposta simulada para: "${input}". Meu backend legal e maneiro ainda está sendo construído ^_~`
-    };
-    setInput('');
+    const data = await response.json();
+    botResponse.text = data.resposta || "Sem resposta do servidor.";
+  } catch (error) {
+    console.error("Erro ao chamar a IA:", error);
+    botResponse.text = "Erro ao se comunicar com a IA.";
+  }
 
-    setTimeout(() => {
-      setThisChat(prev => [...prev, botResponse]);
-    }, 1000);
 
-    
+  setThisChat(prev => [...prev, botResponse]);
 
-    const upddChats = chats.map(c => 
-      c.chatId.toString() === thisChatId.toString() 
-        ? { ...c, messages: [...c.messages, userMessage, botResponse] } 
-        : c
-    );
-  
-    const upddUser = { ...user, chats: upddChats };
+  // Atualiza também no histórico do usuário (localStorage + MongoDB)
+  const upddChats = chats.map(c =>
+    c.chatId.toString() === thisChatId.toString()
+      ? { ...c, messages: [...c.messages, userMessage, botResponse] } 
+      : c
+  );
 
-    setUser(upddUser);
-    setChats(upddChats);
+  const upddUser = { ...user, chats: upddChats };
+  setUser(upddUser);
+  setChats(upddChats);
+  localStorage.setItem('LocalUser', JSON.stringify(upddUser));
+  updUserDB({ user: upddUser });
+};
 
-    localStorage.setItem('LocalUser', JSON.stringify(upddUser));
-
-    updUserDB({user: upddUser}); // Atualiza o mongo
-  };
 
   const handleNewChat = () => {
     const newChatId = lastChatId ? parseInt(lastChatId) + 1 : 1;
