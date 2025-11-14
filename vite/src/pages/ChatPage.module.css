@@ -60,6 +60,7 @@
 
 .chatContainer {
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   width: 100%;
   max-width: 75%; 
@@ -73,10 +74,33 @@
 
 .chatHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
   background-color: var(--unifor-blue);
   color: var(--text-light);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Talvez mudar as cores, coloquei assim para dar um bom destaque -Buisi */
+.adminButton {
+  background-color: #ffc107; 
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.adminButton:hover {
+  background-color: #ffda6a;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .chatAvatar {

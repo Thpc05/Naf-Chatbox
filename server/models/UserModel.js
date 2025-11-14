@@ -53,7 +53,11 @@ const chatRegisterSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true, // Email antes não estava como único -Buisi
     require: true,
+  },
+  telefone: { // Não tiha telefone wwwwwwww -Buisi
+      type: String,
   },
   bairro: {
     type: String,
@@ -64,7 +68,12 @@ const chatRegisterSchema = new mongoose.Schema({
   cnpj: {
     type: String,
   },
-  chats: [chatsSchema]
+  chats: [chatsSchema],
+
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  }
 
 })
 

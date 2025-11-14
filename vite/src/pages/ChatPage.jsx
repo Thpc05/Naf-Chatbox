@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './ChatPage.module.css';
 import updUserDB from '../requisicoes/UsersReqs'
 
@@ -9,6 +10,8 @@ const ChatPage = () => {
   const [thisChatId, thisSetChatId] = useState(null); // saudades js -Theodosius
   const [thisChat, setThisChat] = useState([]); // Demorei pra entender q vc n ta copiando e sim ligando -Theodosius // WWWWWW -Buisi
   const [lastChatId, setLastChatId] = useState(null);
+
+  const [isAdmin, setIsAdmin] = useState(false); // Saber se é ADM -Buisi
   
   useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem('LocalUser'));
@@ -16,6 +19,10 @@ const ChatPage = () => {
     console.log("Carregando usuário do localStorage:", localUser);
     if (localUser) {
         setUser(localUser);
+
+        if (localUser.isAdmin) {
+          setIsAdmin(true);
+        }
         
         const localChats = localUser.chats || [];
         setChats(localChats);
@@ -123,11 +130,20 @@ const ChatPage = () => {
       <div className={`${styles.chatContainer} fade-in`}>
         
         <header className={styles.chatHeader}>
-          <div className={styles.chatAvatar}>IA</div>
-          <div className={styles.chatHeaderText}>
-            <h3>Assistente IRPF</h3>
-            <p>Online</p>
+          <div className={styles.headerLeft}>
+            <div className={styles.chatAvatar}>IA</div>
+            <div className={styles.chatHeaderText}>
+              <h3>Assistente IRPF</h3>
+              <p>Online</p>
+            </div>
           </div>
+          
+          {isAdmin && (
+            <Link to="/admin" className={styles.adminButton}>
+              Painel Admin
+            </Link>
+          )}
+
         </header>
         
         <main className={styles.messageList}>
