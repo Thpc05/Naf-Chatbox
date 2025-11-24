@@ -41,17 +41,12 @@ const chatsSchema = new mongoose.Schema({
 
 // Model principal
 const chatRegisterSchema = new mongoose.Schema({
-  user: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true 
-  },
-  nome: {
+  email: {
     type: String,
     require: true,
+    unique: true
   },
-  email: {
+  nome: {
     type: String,
     unique: true, // Email antes não estava como único -Buisi
     require: true,

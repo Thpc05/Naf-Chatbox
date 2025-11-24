@@ -5,7 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
 
-import faqData from "../config/faq_irpf_2024.json" assert { type: "json" };
+import faqData from "../config/faq_irpf_2024.json" with { type: "json" };
 
 dotenv.config();
 
@@ -84,7 +84,7 @@ export const responderPergunta = async (req, res) => {
     if (isGreeting) {
         console.log("Saudações detectadas — resposta automática enviada.");
         return res.json({
-            resposta: "Olá! Eu sou o Theo Steps, seu assistente virtual do IRPF. Como posso ajudar?"
+            resposta: "Olá! Eu sou o Theodosius, seu assistente virtual do IRPF. Como posso ajudar?"
         });
     }
 
@@ -96,7 +96,7 @@ export const responderPergunta = async (req, res) => {
     console.log("\n--------------------------------------------\n");
 
     const contexto = `
-Você é o assistente Theo Steps, especialista em IRPF.
+Você é o assistente Theodosius, especialista em IRPF.
 
 FAQ RELEVANTE:
 ${contextoFAQ || "Nenhuma informação específica foi encontrada no FAQ para esta consulta."}
@@ -139,8 +139,8 @@ Regras:
 
 export const updUser = async (req, res) => {
     try {
-        const { user } = req.body;
-        const { nome, email, telefone, bairro, cpf, cnpj, chats } = user.user;
+        const { user } = req.body.user;
+        const { nome, email, telefone, bairro, cpf, cnpj, chats } = user;   
 
         console.log(" Atualizando usuário:", email);
 
@@ -156,7 +156,7 @@ export const updUser = async (req, res) => {
 
         const updatedHistory = await registerModel.findOneAndUpdate(
             { email },
-            { nome, email, telefone, bairro, cpf, cnpj, chats },
+            { nome, telefone, bairro, cpf, cnpj, chats },
             options
         );
 
