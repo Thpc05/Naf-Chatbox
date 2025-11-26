@@ -5,6 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
 
+// Para versões antigas (do Eduardo por exemplo) é "assert" ao invés de "with" que é para versões de Node mais atuais
 import faqData from "../config/faq_irpf_2024.json" with { type: "json" };
 
 dotenv.config();
