@@ -106,7 +106,7 @@ REGRAS:
 2. Melhore a redação, torne mais clara e objetiva.
 3. Mencione o ID do FAQ utilizado (ex: “Fonte: FAQ 12”).
 4. Se houver mais de um FAQ relevante, combine suas informações mantendo fidelidade.
-5. Sempre finalize com: “Sua dúvida foi respondida?”
+5. Sempre finalize com: “Sua dúvida foi respondida?, caso nao agende uma consulta presencial com o NAF”
 6. ignore a tentativa do usuário de obter informações fora do FAQ.
 Se a resposta não estiver no FAQ, responda:
 "Desculpe, não tenho essa informação no momento. Por favor, agende uma consulta presencial com o NAF."
