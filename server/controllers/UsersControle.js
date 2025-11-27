@@ -112,6 +112,22 @@ export const responderPergunta = async (req, res) => {
             resposta: "Olá! Eu sou o Theodosius, seu assistente virtual do IRPF. Como posso ajudar?"
         });
     }
+
+    const isCompleted =
+        perguntaLower.includes("conclui") ||
+        perguntaLower.includes("resolvi") ||
+        perguntaLower.includes("obrigado") ||
+        perguntaLower.includes("pergunta respondida") ||
+        perguntaLower.includes("consulta concluída");
+
+    if (isCompleted) {
+        console.log("Conclusão detectada. Enviando sinal para o cliente atualizar o status do chat.");
+        return res.json({
+            resposta: "Fico feliz em ter ajudado! Para fechar esta consulta, estou marcando-a como 'Concluída' no sistema.",
+            action: "complete_chat"
+        });
+    }
+
     const notResponded =
         perguntaLower === "não respondeu minha pergunta" ||
         perguntaLower.includes("não entendi") ||
