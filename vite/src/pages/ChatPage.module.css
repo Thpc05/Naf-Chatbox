@@ -100,8 +100,8 @@
 }
 /* Talvez mudar as cores, coloquei assim para dar um bom destaque -Buisi */
 .adminButton {
-  background-color: #ffc107; 
-  color: #333;
+  background-color: #0077c8; 
+  color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   text-decoration: none;
@@ -111,7 +111,8 @@
 }
 
 .adminButton:hover {
-  background-color: #ffda6a;
+  color: white;
+  background-color: #0a72b7;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
@@ -237,4 +238,20 @@
 
 .messageList::-webkit-scrollbar-thumb:hover {
   background: #909090;
+}
+
+.voltarButton {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.voltarButton:hover {
+  color: white;
+  background-color: #ff1a1a;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.2);
 }

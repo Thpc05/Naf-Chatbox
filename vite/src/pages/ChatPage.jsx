@@ -137,6 +137,10 @@ const ChatPage = () => {
               <p>Online</p>
             </div>
           </div>
+
+          <Link to="/" className={styles.voltarButton}>
+            Voltar
+          </Link>
           
           {isAdmin && (
             <Link to="/admin" className={styles.adminButton}>
