@@ -10,6 +10,7 @@ const ChatPage = () => {
   const [thisChatId, thisSetChatId] = useState(null); // saudades js -Theodosius
   const [thisChat, setThisChat] = useState([]); // Demorei pra entender q vc n ta copiando e sim ligando -Theodosius // WWWWWW -Buisi
   const [lastChatId, setLastChatId] = useState(null);
+  const [isThinking, setIsThinking] = useState(false);
 
   const [isAdmin, setIsAdmin] = useState(false); // Saber se é ADM -Buisi
   
@@ -54,6 +55,7 @@ const ChatPage = () => {
   }, [thisChat]);
 
   const handleSend = async (e) => {
+  setIsThinking(true);
   e.preventDefault();
   if (input.trim() === '') return;
 
@@ -77,7 +79,7 @@ const ChatPage = () => {
     botResponse.text = "Erro ao se comunicar com a IA.";
   }
 
-
+  setIsThinking(false);
   setThisChat(prev => [...prev, botResponse]);
 
   // Atualiza também no histórico do usuário (localStorage + MongoDB)
@@ -158,6 +160,17 @@ const ChatPage = () => {
               {msg.text}
             </div>
           ))}
+          {isThinking && (
+            <div className={styles.botThinking}>
+              <span>A assistente está pensando</span>
+              <span className={styles.dots}>
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+              </span>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </main>
         

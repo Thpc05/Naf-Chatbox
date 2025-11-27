@@ -112,6 +112,17 @@ export const responderPergunta = async (req, res) => {
             resposta: "Olá! Eu sou o Theodosius, seu assistente virtual do IRPF. Como posso ajudar?"
         });
     }
+    const notResponded =
+        perguntaLower === "não respondeu minha pergunta" ||
+        perguntaLower.includes("não entendi") ||
+        perguntaLower.includes("não me respondeu");
+
+    if (notResponded) {
+        console.log("Pergunta do cliente não respondida, recomendar agendamento");
+        return res.json({
+            resposta: "Perdão por não conseguir responder sua pergunta, para uma análise mais detalhada recomendo um agendamento para marcar uma consulta presencial com o NAF, é só ir nesse endereço: https://unifor.br/web/guest/naf"
+        });
+    }
 
     // Busca RAG
     const contextoFAQ = getRelevantFaq(pergunta);
@@ -139,7 +150,7 @@ REGRAS DE ORGANIZAÇÃO:
 5. Mencione o ID do FAQ utilizado (ex: “Fonte: FAQ 12”).
 6. Mencione (FAQ: {quebra de linha} gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/perguntas-e-respostas/dirpf/pr-irpf-2024.pdf).
 7. Se houver mais de um FAQ relevante, combine suas informações mantendo fidelidade.
-8. Sempre finalize com: “Sua dúvida foi respondida?, caso não agende uma consulta presencial com o NAF”.
+8. Sempre finalize com: “Sua dúvida foi respondida?, caso não agende uma consulta presencial com o NAF, caso sim digite que concluiu sua consulta”.
 
 `;
 
