@@ -115,6 +115,7 @@ const ChatPage = () => {
         <div className={styles.chatMenuList}>
           {chats.map((chat) => (
             <button
+              style={thisChatId === chat.chatId ? { backgroundColor: '#007bff', color: 'white' } : {}}
               key={chat.chatId}
               className={styles.chatMenuItem}
               onClick={() => {
@@ -140,9 +141,6 @@ const ChatPage = () => {
             </div>
           </div>
 
-          <Link to="/" className={styles.voltarButton}>
-            Voltar
-          </Link>
           
           {isAdmin && (
             <Link to="/admin" className={styles.adminButton}>
@@ -150,6 +148,9 @@ const ChatPage = () => {
             </Link>
           )}
 
+          <Link to="/" className={styles.voltarButton}>
+            Voltar
+          </Link>
         </header>
         
         <main className={styles.messageList}>
