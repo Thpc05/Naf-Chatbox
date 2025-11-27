@@ -156,6 +156,7 @@ REGRAS PRINCIPAIS:
 1. Use o conteúdo do FAQ exibido abaixo como base.
 2. Caso a pergunta não tenha relação com IRPF retorne: "Desculpe, não consegui processar sua pergunta. Porfavor tente novamente ou procure uma consulta presencial com o NAF"
 3. NÃO PASSE DE 2000 CHAR, de preferencia fique bem abaixo disso, a não ser que a pergunta peça aprofundamento
+4. SE A PERGUNTA TIVER RELAÇÃO AO IRPF, MAS FOR VAGA OU NÃO FOR BEM ESPECIFICADA, ORIENTE O CLIENTE PARA ELE ELABORAR MELHOR O QUESTIONAMENTO
 
 
 REGRAS DE ORGANIZAÇÃO:
