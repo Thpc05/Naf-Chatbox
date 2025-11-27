@@ -2,7 +2,7 @@ export async function updUserDB (user) {
 
     console.log(user);
     try {
-            const response = await fetch('http://localhost:3035/db/register/updUser', {
+            const response = await fetch('https://nafchatbox.vercel.app/db/register/updUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ export async function updUserDB (user) {
 export async function getAllUsersDB () {
 
     try {
-        const response = await fetch('http://localhost:3035/db/register/getAllUsers', {
+        const response = await fetch('https://nafchatbox.vercel.app/db/register/getAllUsers', {
             method: 'GET',
             headers: {
            'Content-Type': 'application/json'
