@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import logo from '../assets/UniforLogo.svg';
 
@@ -86,6 +87,9 @@ const LoginPage = () => {
             Acessar Chat
           </button>
         </form>
+          <Link to="/" className={styles.voltarButton}>
+            Voltar
+          </Link>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './ChatPage.module.css';
 import updUserDB from '../requisicoes/UsersReqs'
+import perguntarIa from '../requisicoes/UsersReqs'
 
 
 const ChatPage = () => {
@@ -65,19 +66,7 @@ const ChatPage = () => {
 
   let botResponse = { sender: 'bot', text: '' };
 
-  try {
-    const response = await fetch('http://localhost:3035/db/register/perguntar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pergunta: input })
-    });
-
-    const data = await response.json();
-    botResponse.text = data.resposta || "Sem resposta do servidor.";
-  } catch (error) {
-    console.error("Erro ao chamar a IA:", error);
-    botResponse.text = "Erro ao se comunicar com a IA.";
-  }
+  botResponse.text = await perguntarIa(input) // Pergunta pra ia
 
   setIsThinking(false);
   setThisChat(prev => [...prev, botResponse]);
@@ -93,7 +82,7 @@ const ChatPage = () => {
   setUser(upddUser);
   setChats(upddChats);
   localStorage.setItem('LocalUser', JSON.stringify(upddUser));
-  updUserDB({ user: upddUser });
+  updUserDB(upddUser);
 };
 
 

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AdminPage.module.css';
 import { Link } from 'react-router-dom';
+import updUserDB from '../requisicoes/UsersReqs'
+
+const localAdmin = JSON.parse(localStorage.getItem('LocalUser'));
+const allUsers = JSON.parse(localStorage.getItem('AllUsers'));
 
 // Componentes da Dashboard -Buisi
 const AdminDashboard = ({ stats }) => (
@@ -34,6 +38,18 @@ const UserManagement = ({ users }) => {
     (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
+  const handleChangeAdmStats = async (userToUpdate) => {
+    if (!userToUpdate || localAdmin.email === userToUpdate.email) return
+
+    const updatedUser = {
+      ...userToUpdate,
+      isAdmin: !userToUpdate.isAdmin
+    }
+
+    await updUserDB(updatedUser)
+    setSelectedUser(updatedUser)
+  };
+
   if (selectedUser) {
     return (
       <div className={styles.userDetails}>
@@ -46,8 +62,11 @@ const UserManagement = ({ users }) => {
         <p><strong>Bairro:</strong> {selectedUser.bairro || 'N/A'}</p>
         <p><strong>CPF:</strong> {selectedUser.cpf || 'N/A'}</p>
         <p><strong>CNPJ:</strong> {selectedUser.cnpj || 'N/A'}</p>
-        <p><strong>Admin:</strong> {selectedUser.isAdmin ? 'Sim' : 'Não'}</p>
-        <hr />
+        <div className={styles.ChangeAdmStats}>
+          <p><strong>Admin:</strong></p>
+          <button className={selectedUser.isAdmin ? styles.ChangeAdmStatsButtonTrue: styles.ChangeAdmStatsButtonFalse} onClick={() => handleChangeAdmStats(selectedUser)}>{selectedUser.isAdmin ? 'True' : 'False'}</button>
+        </div>
+        <hr/>
         <h3>Conversas do Usuário ({selectedUser.chats.length})</h3>
         <div className={styles.chatHistory}>
           {selectedUser.chats.map(chat => (
@@ -94,31 +113,11 @@ const UserManagement = ({ users }) => {
 
 const AdminPage = () => {
   const [tab, setTab] = useState('dashboard');
-  const [allUsers, setAllUsers] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchAllUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('http://localhost:3035/db/register/getAllUsers');
-        if (!response.ok) {
-          throw new Error('Falha ao buscar dados dos usuários.');
-        }
-        const data = await response.json();
-        setAllUsers(data.data || []);
-        
-        calculateStats(data.data || []);
-
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const calculateStats = (users) => {
       const totalUsers = users.length;
       let totalChats = 0;
@@ -137,9 +136,9 @@ const AdminPage = () => {
         totalMessages,
         avgMsgsPerUser: totalUsers > 0 ? totalMessages / totalUsers : 0, // Tentativa de calculo para a médio -Buisi
       });
+      setLoading(false);
     };
-
-    fetchAllUsers();
+    calculateStats(allUsers || []);
   }, []);
 
   if (loading) return <p className={styles.loading}>Carregando dados do admin...</p>;

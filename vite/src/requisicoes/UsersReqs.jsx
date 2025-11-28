@@ -1,8 +1,10 @@
+const baseUrl = 'http://localhost:3035/db/user/'
+
 export async function updUserDB (user) {
 
-    console.log(user);
+    console.log('Atualizando UsuarioDB: ', user);
     try {
-            const response = await fetch('http://localhost:3035/db/register/updUser', {
+            const response = await fetch(`${baseUrl}updUser`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,7 +30,7 @@ export async function updUserDB (user) {
 export async function getAllUsersDB () {
 
     try {
-        const response = await fetch('http://localhost:3035/db/register/getAllUsers', {
+        const response = await fetch(`${baseUrl}getAllUsers`, {
             method: 'GET',
             headers: {
            'Content-Type': 'application/json'
@@ -50,4 +52,22 @@ export async function getAllUsersDB () {
             return null;
         }
     }
+
+export async function perguntarIa(input) {
+    try {
+    const response = await fetch(`${baseUrl}perguntar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pergunta: input })
+    });
+
+    const data = await response.json();
+    botResponse.text = data.resposta || "Sem resposta do servidor.";
+  } catch (error) {
+    console.error("Erro ao chamar a IA:", error);
+    botResponse.text = "Erro ao se comunicar com a IA.";
+  }
+}
+
+    
 export default updUserDB;

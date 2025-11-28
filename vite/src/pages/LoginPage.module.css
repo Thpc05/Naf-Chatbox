@@ -45,6 +45,7 @@
 
 .loginForm {
   text-align: left;
+  margin-bottom: 1.5rem;
 }
 
 .loginForm label {
@@ -64,6 +65,8 @@
   margin-bottom: 1.25rem;
   transition: var(--smooth-transition);
   font-size: 1rem;
+  color: black;
+  background-color: #f9f9f9;
 }
 
 .loginForm input:focus {
@@ -101,7 +104,7 @@
 .altButton {
   display: block;
   margin: 0 auto;
-  color: blue;
+  color: var(--unifor-accent);
   background-color: transparent;
   font-size: 1rem;
   font-weight: 700;
@@ -109,8 +112,24 @@
   transition: var(--smooth-transition);
   margin-top: 1.5rem;
 }
-.altButton:hover {
-  text-decoration: underline;
+
+.voltarButton {
+  background-color: #ff4d4d;
+  margin-top: 1.5rem;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s ease;
+  align-self: center;
+  justify-self: center;
+}
+
+.voltarButton:hover {
+  color: white;
+  background-color: #ff1a1a;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.2);
 }
 
 .logoImage {

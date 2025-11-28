@@ -9,22 +9,6 @@ import faqData from "../config/faq_irpf_2024.json" with { type: "json" };
 
 dotenv.config();
 
-
-
-// Scoring baseado em palavras-chave (TF-IDF simplificado)
-function pontosText(texto, pergunta) {
-    const palavrasPergunta = pergunta.toLowerCase().split(/\s+/);
-    const textoLower = texto.toLowerCase();
-
-    let pontos = 0;
-    for (const w of palavrasPergunta) {
-        if (w.length > 2 && textoLower.includes(w)) {
-            pontos++;
-        }
-    }
-    return pontos;
-}
-
 function normalizarTexto(texto) {
     return texto
         .toLowerCase()
@@ -202,10 +186,9 @@ REGRAS DE ORGANIZAÇÃO:
 
 export const updUser = async (req, res) => {
     try {
-        const { user } = req.body.user;
-        const { nome, email, telefone, bairro, cpf, cnpj, chats } = user;   
-
-        console.log(" Atualizando usuário:", email);
+        console.log('Body recebido', req.body);
+        const { user } = req.body;
+        const { nome, email, telefone, bairro, cpf, cnpj, chats, isAdmin } = user;   
 
         if (!email) {
             return res.status(400).json({ message: 'Email está vazio.' });
@@ -219,7 +202,7 @@ export const updUser = async (req, res) => {
 
         const updatedHistory = await registerModel.findOneAndUpdate(
             { email },
-            { nome, telefone, bairro, cpf, cnpj, chats },
+            { nome, telefone, bairro, cpf, cnpj, chats, isAdmin },
             options
         );
 

@@ -178,6 +178,31 @@
     background-color: #0056b3;
 }
 
+.ChangeAdmStats {
+    display: flex;
+    height: 40px;
+    align-items: end;
+    gap: 10px;
+}  
+
+.ChangeAdmStatsButtonTrue {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    background-color: #007bff;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.ChangeAdmStatsButtonFalse {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    background-color: #f0f2f5;
+    color: black;
+    margin-bottom: 15px;
+}
+
 .chatHistory {
     margin-top: 1rem;
     max-height: 40vh;
